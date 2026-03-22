@@ -1,0 +1,54 @@
+<h1 class="text-3xl md:text-4xl font-bold mb-4">
+  {{ section.settings.title_404 }}
+</h1>
+
+<p class="text-lg mb-6 ">
+  {{ section.settings.subtext_404 }}
+</p>
+
+{% if section.settings.button_link == blank %}
+  {% assign shop_url = '/' %}
+{% else %}
+  {% assign shop_url = section.settings.button_link %}
+{% endif %}
+
+<a
+  href="{{ shop_url }}"
+  class="inline-block px-6 py-3 bg-black text-white rounded-lg font-medium transition duration-300 hover:bg-gray-800 hover:scale-105"
+>
+  {{ section.settings.button_text }}
+</a>
+
+{% schema %}
+{
+  "name": "Template 404",
+  "tag": "section",
+  "class": "bg-yellow-500 h-screen flex flex-col items-center justify-center text-center w-full",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title_404",
+      "default": "404 - Page Not Found",
+      "label": "404 Title"
+    },
+    {
+      "type": "text",
+      "id": "subtext_404",
+      "default": "The page you are looking for doesn't exist or has been moved.",
+      "label": "404 Subtext"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "default": "Back Home",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link",
+      "default": "/"
+    }
+  ]
+}
+{% endschema %}
