@@ -10,12 +10,21 @@
       width=""
       height=""
     >
+    <img
+      src="{{ article.image | image_url }}"
+      alt="{{ article.image.alt | escape }}"
+      width=""
+      height=""
+    >
   {% endif %}
 
-  <div>
+  <div class="bg-red-500">
     {{ article.content }}
   </div>
 
 {% else %}
   <p>No article found.</p>
 {% endif %}
+
+
+
