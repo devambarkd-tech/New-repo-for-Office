@@ -10,15 +10,9 @@
       width=""
       height=""
     >
-    <img
-      src="{{ article.image | image_url }}"
-      alt="{{ article.image.alt | escape }}"
-      width=""
-      height=""
-    >
   {% endif %}
 
-  <div class="bg-red-500">
+  <div>
     {{ article.content }}
   </div>
 
