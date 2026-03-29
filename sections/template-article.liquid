@@ -17,6 +17,7 @@
         <div class="flex items-center justify-center">
           <div class="max-w-7xl text-center">
             {% if section.settings.enable_author %}
+              <small>{{ section.settings.author_prefix }}</small>
               <small>{{ article.author }}</small>
             {% endif %}
           </div>
@@ -39,7 +40,7 @@
             <img
               src="{{ article.image | image_url }}"
               alt="{{ article.image.alt | escape }}"
-              class="w-full h-80 md:h-96 object-center object-cover"
+              class="w-full h-96 md:h-124 object-center object-cover"
             >
           {% else %}
             {% assign placeholder_image = 'lifestyle-2' %}
@@ -74,6 +75,12 @@
       "id": "enable_published_date",
       "default": true,
       "label": "Display Published Date"
+    },
+    {
+      "type": "text",
+      "id": "author_prefix",
+      "label": "Author text before name",
+      "default": "The writer is"
     }
   ],
   "blocks": [
