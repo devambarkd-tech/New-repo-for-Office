@@ -86,7 +86,7 @@
     {% form 'new_comment', article %}
       <div class="flex-1 mx-auto items-center justify-center max-w-4xl px-4">
         {% if form.errors %}
-          <div class="border p-5">
+          <div class="border p-3 rounded-b-sm">
             <div class="flex flex-row items-center w-full my-3">
               <div class="text-red-500">
                 {% render 'icon-failed' %}
@@ -102,7 +102,7 @@
             </ul>
           </div>
         {% elsif form.posted_successfully? %}
-          <div class="border p-5">
+          <div class="border p-3 rounded-b-sm">
             <div class="flex flex-row items-center w-full my-3">
               <div class="text-green-500">
                 {% render 'icon-success' %}
