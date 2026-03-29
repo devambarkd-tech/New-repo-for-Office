@@ -7,6 +7,10 @@
         {{ 'image' | placeholder_svg_tag: 'w-50' }}
       {% endif %}
       <h1>{{ article.title }}</h1>
+      {% if article.excerpt.size > 0 %}
+      {% else %}
+        <p>{{ article.content | strip_html | truncatewords: 15 }}</p>
+      {% endif %}
     </div>
   {% endfor %}
 {% endpaginate %}
