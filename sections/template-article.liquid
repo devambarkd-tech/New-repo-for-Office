@@ -60,6 +60,66 @@
   {% endfor %}
 </article>
 
+{% if blog.comments_enabled? %}
+  <div id="comments" class="my-8">
+    {% if article.comments_count > 0 %}
+    {% else %}
+      <p>No comments yet. Be the first to comment!</p>
+    {% endif %}
+  </div>
+  <div id="comment_form" class="my-8">
+    {% form 'new_comment', article %}
+      <div class="flex-1 mx-auto items-center justify-center max-w-4xl px-4">
+        <div class="px-1 md:flex mb-3">
+          <div class="px-3 md:w-1/2">
+            <label for="comment_author" class="text-gray-700 font-medium uppercase text-xs mb-2">Name</label>
+            <input
+              type="text"
+              name="comment[author]"
+              id="comment_author"
+              class="w-full text-gray-700 border py-3 px-4 mb-3 focus:outline-none"
+              placeholder="Type Your Name"
+              required
+            >
+          </div>
+          <div class="px-3 md:w-1/2">
+            <label for="comment_email" class="text-gray-700 font-medium uppercase text-xs mb-2">Email</label>
+            <input
+              type="email"
+              name="comment[email]"
+              id="comment_email"
+              class="w-full text-gray-700 border py-3 px-4 mb-3 focus:outline-none"
+              placeholder="example@email.com"
+              required
+            >
+          </div>
+        </div>
+        <div class="px-1 md:flex mb-3">
+          <div class="md:w-full px-3">
+            <label for="comment_content" class="text-gray-700 font-medium uppercase text-xs mb-2">Comment</label>
+            <textarea
+              class="w-full resize-none text-gray-700 h-20 py-2 px-3 focus:outline-none border"
+              name="comment[body]"
+              id="comment_content"
+              placeholder="Write your comment..."
+              required
+            ></textarea>
+          </div>
+        </div>
+        <div class="px-1 md:flex mb-3">
+          <div class="md:w-full px-3">
+            <input
+              type="submit"
+              value="Post comment"
+              class="w-full cursor-pointer px-4 py-2 border text-base font-medium text-white bg-gray-900 hover:bg-gray-600"
+            >
+          </div>
+        </div>
+      </div>
+    {% endform %}
+  </div>
+{% endif %}
+
 {% schema %}
 {
   "name": "Template Article",
