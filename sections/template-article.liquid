@@ -18,7 +18,7 @@
           <div class="max-w-7xl text-center">
             {% if section.settings.enable_author %}
               <small>{{ section.settings.author_prefix }}</small>
-              <small>{{ article.author }}</small>
+              <small class="text-red-500">{{ article.author }}</small>
             {% endif %}
           </div>
         </div>
@@ -80,7 +80,7 @@
       "type": "text",
       "id": "author_prefix",
       "label": "Author text before name",
-      "default": "The writer is"
+      "default": "Written by"
     }
   ],
   "blocks": [
