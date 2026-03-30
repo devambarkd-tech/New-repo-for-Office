@@ -12,14 +12,19 @@
         {% if article.excerpt.size > 0 %}
           <p>{{ article.excerpt }}</p>
         {% else %}
-          <p>{{ article.content | strip_html | truncatewords: 15 }}</p>
+          <p>{{ article.content | strip_html | truncatewords: 25 }}</p>
         {% endif %}
       {% endif %}
+
+      {% if section.settings.enable_author %}
+        <p>By {{ article.author }}</p>
+      {% endif %}
+
       {% if section.settings.enable_view_more %}
         <div class="flex items-center justify-center mt-4">
           <a
             href="{{ article.url }}"
-            class="bg-black text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition duration-200"
+            class="bg-black text-white px-4 py-4 rounded-md text-sm font-medium hover:bg-gray-700 transition duration-200"
           >
             View more
           </a>
@@ -52,6 +57,12 @@
       "type": "checkbox",
       "id": "enable_view_more",
       "label": "Show View More Button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_author",
+      "label": "Show Author",
       "default": true
     }
   ]
