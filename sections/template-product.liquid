@@ -59,26 +59,24 @@
 
     <!-- Info -->
     <div class="product--information sticky top-6 h-fit bg-white rounded-2xl shadow-sm p-5 md:p-6">
-      {% form 'product', product %}
+      {% form 'product', product, id: 'product-form', novalidate: 'novalidate' %}
         <input type="hidden" name="id" value="{{ selected_variant.id }}">
+
         <div class="space-y-5">
           {% for block in section.blocks %}
             {% case block.type %}
               {% when 'vendor' %}
-                <!-- Vendor -->
                 <span class="text-xs uppercase tracking-wider text-gray-400">
                   {{ product.vendor }}
                 </span>
 
               {% when 'title' %}
-                <!-- Title -->
                 <h1 class="text-2xl md:text-3xl font-semibold text-gray-900 leading-tight">
                   {{ product.title }}
                 </h1>
-              {% when 'price' %}
-                <!-- Price -->
 
-                <div class="flex items-center gap-3">
+              {% when 'price' %}
+                <div class="flex items-center gap-3" id="price-{{ section.id }}">
                   {% if selected_variant.compare_at_price > selected_variant.price %}
                     <span class="text-sm text-gray-400 line-through">
                       {{ selected_variant.compare_at_price | money }}
@@ -95,9 +93,12 @@
                 </div>
 
               {% when 'variant_selector' %}
-                <!-- Variants -->
                 {% unless product.has_only_default_variant %}
-                  <div class="space-y-4" data-url="{{ product.url }}" data-section="{{ section.id }}">
+                  <variant-selector
+                    class="space-y-4"
+                    data-url="{{ product.url }}"
+                    data-section="{{ section.id }}"
+                  >
                     {% for option in product.options_with_values %}
                       <div>
                         <label
@@ -125,11 +126,15 @@
                         </select>
                       </div>
                     {% endfor %}
-                  </div>
+
+                    <!-- ✅ IMPORTANT: JSON only once -->
+                    <script type="application/json">
+                      {{ product.variants | json }}
+                    </script>
+                  </variant-selector>
                 {% endunless %}
 
               {% when 'quantity' %}
-                <!-- Quantity -->
                 <div>
                   <label
                     for="Quantity-{{ section.id }}"
@@ -149,7 +154,6 @@
                 </div>
 
               {% when 'description' %}
-                <!-- Description -->
                 <div>
                   <p class="text-gray-600 leading-relaxed text-sm">
                     {{ product.description }}
@@ -157,7 +161,6 @@
                 </div>
 
               {% when 'checkout_buttons' %}
-                <!-- Button -->
                 <button
                   type="submit"
                   name="add"
@@ -172,8 +175,6 @@
                     Add to Cart
                   {% endif %}
                 </button>
-              {% else %}
-
             {% endcase %}
           {% endfor %}
         </div>
@@ -181,6 +182,72 @@
     </div>
   </div>
 </div>
+<script>
+  class VariantSelector extends HTMLElement {
+    constructor() {
+      super();
+      this.addEventListener('change', this.onVariantChange.bind(this));
+    }
+
+    onVariantChange() {
+      this.getSelectedOptions();
+      this.getSelectedVariant();
+
+      if (this.currentVariant) {
+        this.updateURL();
+        this.updateFormID();
+        this.updatePrice();
+      }
+    }
+
+    getSelectedOptions() {
+      this.options = Array.from(this.querySelectorAll('select'), (select) => select.value);
+    }
+
+    getVariantJSON() {
+      this.variantData = this.variantData || JSON.parse(this.querySelector('[type="application/json"]').textContent);
+
+      return this.variantData;
+    }
+
+    getSelectedVariant() {
+      this.currentVariant = this.getVariantJSON().find((variant) => {
+        return variant.options.every((option, index) => {
+          return this.options[index] === option;
+        });
+      });
+    }
+
+    updateURL() {
+      if (!this.currentVariant) return;
+      window.history.replaceState({}, '', `${this.dataset.url}?variant=${this.currentVariant.id}`);
+    }
+
+    updateFormID() {
+      const input = document.querySelector('#product-form').querySelector('input[name="id"]');
+
+      input.value = this.currentVariant.id;
+    }
+
+    updatePrice() {
+      fetch(`${this.dataset.url}?variant=${this.currentVariant.id}&section_id=${this.dataset.section}`)
+        .then((response) => response.text())
+        .then((responseText) => {
+          const id = `price-${this.dataset.section}`;
+          const html = new DOMParser().parseFromString(responseText, 'text/html');
+
+          const oldPrice = document.getElementById(id);
+          const newPrice = html.getElementById(id);
+
+          if (oldPrice && newPrice) {
+            oldPrice.innerHTML = newPrice.innerHTML;
+          }
+        });
+    }
+  }
+
+  customElements.define('variant-selector', VariantSelector);
+</script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const swiper = new Swiper('.swiper', {
