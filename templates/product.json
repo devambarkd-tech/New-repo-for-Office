@@ -11,18 +11,25 @@
   "sections": {
     "template": {
       "type": "template-product",
-      "settings": {}
-    },
-    "contact_form_Kqm3Fr": {
-      "type": "contact-form",
-      "name": "Contact Form",
-      "settings": {
-        "form_name": "Contact Product Form"
-      }
+      "blocks": {
+        "vendor": { "type": "vendor" },
+        "title": { "type": "title" },
+        "price": { "type": "price" },
+        "variant_selector": { "type": "variant_selector" },
+        "quantity": { "type": "quantity" },
+        "description": { "type": "description" },
+        "checkout_buttons": { "type": "checkout_buttons" }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "variant_selector",
+        "quantity",
+        "description",
+        "checkout_buttons"
+      ]
     }
   },
-  "order": [
-    "template",
-    "contact_form_Kqm3Fr"
-  ]
+  "order": ["template"]
 }
